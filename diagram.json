@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "author": "SOS ClimaTech",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -76.5, "left": 148.2, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 102.2,
+      "left": 153.6,
+      "attrs": { "color": "blue" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 63.6,
+      "left": 99.8,
+      "attrs": { "color": "magenta" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:GND", "dht1:GND", "black", [ "v0" ] ],
+    [ "esp:D4", "dht1:SDA", "green", [ "v0" ] ],
+    [ "esp:3V3", "dht1:VCC", "red", [ "v0" ] ],
+    [ "esp:D15", "btn1:2", "blue", [ "v0" ] ],
+    [ "btn1:1", "esp:GND", "black", [ "h-40", "v-130" ] ],
+    [ "esp:D2", "led1:A", "red", [] ],
+    [ "esp:GND", "led1:C", "black", [] ]
+  ],
+  "dependencies": {}
+}

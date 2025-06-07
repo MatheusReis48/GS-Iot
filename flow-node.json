@@ -1,0 +1,237 @@
+[
+    {
+        "id": "e4e0b8c25253728f",
+        "type": "tab",
+        "label": "SOS ClimaTech Simples",
+        "disabled": false,
+        "info": "Painel simples para receber dados do ESP32 via MQTT"
+    },
+    {
+        "id": "b16249c0c02d154f",
+        "type": "mqtt in",
+        "z": "e4e0b8c25253728f",
+        "name": "Dados Ambientais (MQTT)",
+        "topic": "sos_climatech_simple/env/data",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "e85b9988d2bcdea0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "46298a6df413a004"
+            ]
+        ]
+    },
+    {
+        "id": "326c695a22a519ce",
+        "type": "mqtt in",
+        "z": "e4e0b8c25253728f",
+        "name": "Alerta Recebido (MQTT)",
+        "topic": "sos_climatech_simple/alert/trigger",
+        "qos": "2",
+        "datatype": "string",
+        "broker": "e85b9988d2bcdea0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 260,
+        "wires": [
+            [
+                "8733f4fe9d80c23b"
+            ]
+        ]
+    },
+    {
+        "id": "46298a6df413a004",
+        "type": "function",
+        "z": "e4e0b8c25253728f",
+        "name": "Extrai Temp/Umid",
+        "func": "var temp = msg.payload.temperature;\nvar hum = msg.payload.humidity;\n\n\nvar msgTemp = { payload: temp };\nvar msgHum = { payload: hum };\n\nreturn [[msgTemp], [msgHum]];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "2d23dcb7db2bc457"
+            ],
+            [
+                "087fdfb2ce293ceb"
+            ]
+        ]
+    },
+    {
+        "id": "2d23dcb7db2bc457",
+        "type": "ui_gauge",
+        "z": "e4e0b8c25253728f",
+        "name": "Temperatura",
+        "group": "group-env",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{value | number:1}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 660,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "087fdfb2ce293ceb",
+        "type": "ui_gauge",
+        "z": "e4e0b8c25253728f",
+        "name": "Umidade",
+        "group": "group-env",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Umidade",
+        "label": "%",
+        "format": "{{value | number:1}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 650,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "8733f4fe9d80c23b",
+        "type": "change",
+        "z": "e4e0b8c25253728f",
+        "name": "Define Texto Alerta",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "ALERTA RECEBIDO!",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 260,
+        "wires": [
+            [
+                "20941427775ea973"
+            ]
+        ]
+    },
+    {
+        "id": "20941427775ea973",
+        "type": "ui_text",
+        "z": "e4e0b8c25253728f",
+        "group": "group-alert",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Último Alerta:",
+        "format": "<font color=red><b>{{payload}}</b></font>",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 650,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "e85b9988d2bcdea0",
+        "type": "mqtt-broker",
+        "name": "AGORA VAI",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "group-env",
+        "type": "ui_group",
+        "name": "Monitoramento Ambiental",
+        "tab": "tab-main",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "group-alert",
+        "type": "ui_group",
+        "name": "Status de Alerta",
+        "tab": "tab-main",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "tab-main",
+        "type": "ui_tab",
+        "name": "Painel Simples",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
